@@ -14,296 +14,300 @@ export type Database = {
   }
   public: {
     Tables: {
-      customer_visits: {
+      appointments: {
         Row: {
-          asking_price: number
-          completed_at: string | null
+          appointment_date: string
+          appointment_time: string
           created_at: string
-          customer_name: string
-          expires_at: string
-          final_price: number | null
+          created_by: string
+          diagnosis: string | null
+          doctor_id: string
+          duration_minutes: number
           id: string
-          item_condition: number
-          item_type_id: string
-          negotiation_count: number
-          player_id: string
-          status: string
+          next_appointment_needed: boolean | null
+          notes: string | null
+          patient_id: string
+          reason: string | null
+          status: Database["public"]["Enums"]["appointment_status"]
+          treatment: string | null
+          updated_at: string
         }
         Insert: {
-          asking_price: number
-          completed_at?: string | null
+          appointment_date: string
+          appointment_time: string
           created_at?: string
-          customer_name: string
-          expires_at?: string
-          final_price?: number | null
+          created_by: string
+          diagnosis?: string | null
+          doctor_id: string
+          duration_minutes?: number
           id?: string
-          item_condition?: number
-          item_type_id: string
-          negotiation_count?: number
-          player_id: string
-          status?: string
+          next_appointment_needed?: boolean | null
+          notes?: string | null
+          patient_id: string
+          reason?: string | null
+          status?: Database["public"]["Enums"]["appointment_status"]
+          treatment?: string | null
+          updated_at?: string
         }
         Update: {
-          asking_price?: number
-          completed_at?: string | null
+          appointment_date?: string
+          appointment_time?: string
           created_at?: string
-          customer_name?: string
-          expires_at?: string
-          final_price?: number | null
+          created_by?: string
+          diagnosis?: string | null
+          doctor_id?: string
+          duration_minutes?: number
           id?: string
-          item_condition?: number
-          item_type_id?: string
-          negotiation_count?: number
-          player_id?: string
-          status?: string
+          next_appointment_needed?: boolean | null
+          notes?: string | null
+          patient_id?: string
+          reason?: string | null
+          status?: Database["public"]["Enums"]["appointment_status"]
+          treatment?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "customer_visits_item_type_id_fkey"
-            columns: ["item_type_id"]
-            isOneToOne: false
-            referencedRelation: "item_types"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "customer_visits_player_id_fkey"
-            columns: ["player_id"]
+            foreignKeyName: "appointments_created_by_fkey"
+            columns: ["created_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "appointments_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
         ]
       }
-      item_categories: {
+      inventory_categories: {
         Row: {
           created_at: string
           description: string | null
-          icon: string | null
           id: string
-          min_shop_level: number
           name: string
         }
         Insert: {
           created_at?: string
           description?: string | null
-          icon?: string | null
           id?: string
-          min_shop_level?: number
           name: string
         }
         Update: {
           created_at?: string
           description?: string | null
-          icon?: string | null
           id?: string
-          min_shop_level?: number
           name?: string
         }
         Relationships: []
       }
-      item_types: {
+      inventory_items: {
         Row: {
-          base_value: number
           category_id: string
           created_at: string
+          current_stock: number
           description: string | null
+          expiry_date: string | null
           id: string
-          image_url: string | null
-          min_shop_level: number
+          min_stock_level: number
           name: string
-          rarity: string
-          weight: number | null
+          supplier: string | null
+          unit_of_measure: string
+          unit_price: number | null
+          updated_at: string
         }
         Insert: {
-          base_value: number
           category_id: string
           created_at?: string
+          current_stock?: number
           description?: string | null
+          expiry_date?: string | null
           id?: string
-          image_url?: string | null
-          min_shop_level?: number
+          min_stock_level?: number
           name: string
-          rarity?: string
-          weight?: number | null
+          supplier?: string | null
+          unit_of_measure?: string
+          unit_price?: number | null
+          updated_at?: string
         }
         Update: {
-          base_value?: number
           category_id?: string
           created_at?: string
+          current_stock?: number
           description?: string | null
+          expiry_date?: string | null
           id?: string
-          image_url?: string | null
-          min_shop_level?: number
+          min_stock_level?: number
           name?: string
-          rarity?: string
-          weight?: number | null
+          supplier?: string | null
+          unit_of_measure?: string
+          unit_price?: number | null
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "item_types_category_id_fkey"
+            foreignKeyName: "inventory_items_category_id_fkey"
             columns: ["category_id"]
             isOneToOne: false
-            referencedRelation: "item_categories"
+            referencedRelation: "inventory_categories"
             referencedColumns: ["id"]
           },
         ]
       }
-      login_attempts: {
+      inventory_transactions: {
         Row: {
-          attempted_at: string
+          created_at: string
           id: string
-          ip_address: string | null
-          password: string
-          user_agent: string | null
-          username: string
+          item_id: string
+          performed_by: string
+          quantity: number
+          reason: string | null
+          transaction_type: string
         }
         Insert: {
-          attempted_at?: string
+          created_at?: string
           id?: string
-          ip_address?: string | null
-          password: string
-          user_agent?: string | null
-          username: string
+          item_id: string
+          performed_by: string
+          quantity: number
+          reason?: string | null
+          transaction_type: string
         }
         Update: {
-          attempted_at?: string
+          created_at?: string
           id?: string
-          ip_address?: string | null
-          password?: string
-          user_agent?: string | null
-          username?: string
-        }
-        Relationships: []
-      }
-      player_inventory: {
-        Row: {
-          acquired_at: string
-          condition_percent: number
-          id: string
-          is_for_sale: boolean
-          item_type_id: string
-          player_id: string
-          purchase_price: number
-          sale_price: number | null
-        }
-        Insert: {
-          acquired_at?: string
-          condition_percent?: number
-          id?: string
-          is_for_sale?: boolean
-          item_type_id: string
-          player_id: string
-          purchase_price: number
-          sale_price?: number | null
-        }
-        Update: {
-          acquired_at?: string
-          condition_percent?: number
-          id?: string
-          is_for_sale?: boolean
-          item_type_id?: string
-          player_id?: string
-          purchase_price?: number
-          sale_price?: number | null
+          item_id?: string
+          performed_by?: string
+          quantity?: number
+          reason?: string | null
+          transaction_type?: string
         }
         Relationships: [
           {
-            foreignKeyName: "player_inventory_item_type_id_fkey"
-            columns: ["item_type_id"]
+            foreignKeyName: "inventory_transactions_item_id_fkey"
+            columns: ["item_id"]
             isOneToOne: false
-            referencedRelation: "item_types"
+            referencedRelation: "inventory_items"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "player_inventory_player_id_fkey"
-            columns: ["player_id"]
+            foreignKeyName: "inventory_transactions_performed_by_fkey"
+            columns: ["performed_by"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
+      }
+      patients: {
+        Row: {
+          address: string | null
+          allergies: string | null
+          chronic_conditions: string | null
+          city: string | null
+          created_at: string
+          date_of_birth: string | null
+          email: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          first_name: string
+          id: string
+          is_active: boolean
+          jmbg: string | null
+          last_name: string
+          medical_notes: string | null
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          allergies?: string | null
+          chronic_conditions?: string | null
+          city?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          first_name: string
+          id?: string
+          is_active?: boolean
+          jmbg?: string | null
+          last_name: string
+          medical_notes?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          allergies?: string | null
+          chronic_conditions?: string | null
+          city?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          first_name?: string
+          id?: string
+          is_active?: boolean
+          jmbg?: string | null
+          last_name?: string
+          medical_notes?: string | null
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
           created_at: string
           email: string
-          experience: number
           full_name: string | null
           id: string
-          level: number
-          money: number
-          reputation: number
-          shop_level: number
-          shop_name: string | null
-          total_deals: number
+          is_active: boolean
+          license_number: string | null
+          phone: string | null
+          role: Database["public"]["Enums"]["user_role"]
+          specialization: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
           email: string
-          experience?: number
           full_name?: string | null
           id?: string
-          level?: number
-          money?: number
-          reputation?: number
-          shop_level?: number
-          shop_name?: string | null
-          total_deals?: number
+          is_active?: boolean
+          license_number?: string | null
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          specialization?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
           email?: string
-          experience?: number
           full_name?: string | null
           id?: string
-          level?: number
-          money?: number
-          reputation?: number
-          shop_level?: number
-          shop_name?: string | null
-          total_deals?: number
+          is_active?: boolean
+          license_number?: string | null
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          specialization?: string | null
           updated_at?: string
           user_id?: string
-        }
-        Relationships: []
-      }
-      shop_upgrades: {
-        Row: {
-          capacity_bonus: number | null
-          cost: number
-          created_at: string
-          description: string
-          id: string
-          level: number
-          name: string
-          reputation_bonus: number | null
-          unlock_categories: string[] | null
-        }
-        Insert: {
-          capacity_bonus?: number | null
-          cost: number
-          created_at?: string
-          description: string
-          id?: string
-          level: number
-          name: string
-          reputation_bonus?: number | null
-          unlock_categories?: string[] | null
-        }
-        Update: {
-          capacity_bonus?: number | null
-          cost?: number
-          created_at?: string
-          description?: string
-          id?: string
-          level?: number
-          name?: string
-          reputation_bonus?: number | null
-          unlock_categories?: string[] | null
         }
         Relationships: []
       }
@@ -315,7 +319,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      appointment_status:
+        | "scheduled"
+        | "confirmed"
+        | "in_progress"
+        | "completed"
+        | "cancelled"
+        | "no_show"
+      user_role: "admin" | "doctor" | "nurse" | "receptionist"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -442,6 +453,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      appointment_status: [
+        "scheduled",
+        "confirmed",
+        "in_progress",
+        "completed",
+        "cancelled",
+        "no_show",
+      ],
+      user_role: ["admin", "doctor", "nurse", "receptionist"],
+    },
   },
 } as const
