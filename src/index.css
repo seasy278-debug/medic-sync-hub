@@ -77,9 +77,8 @@ All colors MUST be HSL.
     --transition-medical: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-smooth: all 0.2s ease-out;
   }
-}
 
-.dark {
+  .dark {
     /* Dark mode for medical interface */
     --background: 214 15% 8%;
     --foreground: 214 15% 92%;
@@ -118,9 +117,7 @@ All colors MUST be HSL.
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
