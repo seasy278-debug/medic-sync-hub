@@ -55,35 +55,28 @@ All colors MUST be HSL.
     --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
-  }
 
-  /* Medical gradients for professional effects */
-  --gradient-medical: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-  --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
-  --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--muted)));
-  
-  /* Professional shadows */
-  --shadow-medical: 0 4px 20px -2px hsl(var(--primary) / 0.15);
-  --shadow-card: 0 2px 12px -2px hsl(214 20% 50% / 0.08);
-  --shadow-elevated: 0 8px 30px -4px hsl(214 20% 50% / 0.12);
-  
-  /* Smooth medical transitions */
-  --transition-medical: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-smooth: all 0.2s ease-out;
+    /* Medical gradients for professional effects */
+    --gradient-medical: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)), hsl(var(--muted)));
+    
+    /* Professional shadows */
+    --shadow-medical: 0 4px 20px -2px hsl(var(--primary) / 0.15);
+    --shadow-card: 0 2px 12px -2px hsl(214 20% 50% / 0.08);
+    --shadow-elevated: 0 8px 30px -4px hsl(214 20% 50% / 0.12);
+    
+    /* Smooth medical transitions */
+    --transition-medical: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.2s ease-out;
+  }
 }
 
 .dark {
