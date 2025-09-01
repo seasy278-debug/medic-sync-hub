@@ -226,35 +226,44 @@ const Dashboard = () => {
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card className="border-border/50 bg-card/80 backdrop-blur-sm hover:shadow-elevated transition-all duration-200 cursor-pointer group">
+          <Card 
+            className="border-border/50 bg-card/80 backdrop-blur-sm hover:shadow-elevated transition-all duration-200 cursor-pointer group"
+            onClick={() => navigate('/patients')}
+          >
             <CardHeader>
               <div className="flex items-center space-x-3">
                 <div className="bg-primary/10 p-3 rounded-lg group-hover:bg-primary/20 transition-colors duration-200">
                   <UserPlus className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg">Dodaj pacijenta</CardTitle>
-                  <CardDescription>Registruj novog pacijenta u sistem</CardDescription>
+                  <CardTitle className="text-lg">Upravljaj pacijentima</CardTitle>
+                  <CardDescription>Dodaj i upravljaj pacijentima</CardDescription>
                 </div>
               </div>
             </CardHeader>
           </Card>
 
-          <Card className="border-border/50 bg-card/80 backdrop-blur-sm hover:shadow-elevated transition-all duration-200 cursor-pointer group">
+          <Card 
+            className="border-border/50 bg-card/80 backdrop-blur-sm hover:shadow-elevated transition-all duration-200 cursor-pointer group"
+            onClick={() => navigate('/appointments')}
+          >
             <CardHeader>
               <div className="flex items-center space-x-3">
                 <div className="bg-success/10 p-3 rounded-lg group-hover:bg-success/20 transition-colors duration-200">
                   <Calendar className="h-6 w-6 text-success" />
                 </div>
                 <div>
-                  <CardTitle className="text-lg">Zakaži pregled</CardTitle>
-                  <CardDescription>Zakaži novi termin za pregled</CardDescription>
+                  <CardTitle className="text-lg">Kalendar termina</CardTitle>
+                  <CardDescription>Zakaži i upravljaj terminima</CardDescription>
                 </div>
               </div>
             </CardHeader>
           </Card>
 
-          <Card className="border-border/50 bg-card/80 backdrop-blur-sm hover:shadow-elevated transition-all duration-200 cursor-pointer group">
+          <Card 
+            className="border-border/50 bg-card/80 backdrop-blur-sm hover:shadow-elevated transition-all duration-200 cursor-pointer group"
+            onClick={() => navigate('/inventory')}
+          >
             <CardHeader>
               <div className="flex items-center space-x-3">
                 <div className="bg-warning/10 p-3 rounded-lg group-hover:bg-warning/20 transition-colors duration-200">
@@ -269,7 +278,10 @@ const Dashboard = () => {
           </Card>
 
           {profile?.role === 'admin' && (
-            <Card className="border-border/50 bg-card/80 backdrop-blur-sm hover:shadow-elevated transition-all duration-200 cursor-pointer group">
+            <Card 
+              className="border-border/50 bg-card/80 backdrop-blur-sm hover:shadow-elevated transition-all duration-200 cursor-pointer group"
+              onClick={() => navigate('/admin')}
+            >
               <CardHeader>
                 <div className="flex items-center space-x-3">
                   <div className="bg-destructive/10 p-3 rounded-lg group-hover:bg-destructive/20 transition-colors duration-200">
