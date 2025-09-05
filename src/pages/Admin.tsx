@@ -129,32 +129,21 @@ const Admin = () => {
 
   const createUser = async () => {
     try {
-      // Create auth user
-      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-        email: newUser.email,
-        password: newUser.password,
-        email_confirm: true,
-        user_metadata: {
-          full_name: newUser.full_name
-        }
-      });
-
-      if (authError) throw authError;
-
-      // Create profile
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          user_id: authData.user.id,
+      // Call Edge Function to create user
+      const { data, error } = await supabase.functions.invoke('create-user', {
+        body: {
           email: newUser.email,
+          password: newUser.password,
           full_name: newUser.full_name,
           role: newUser.role,
           phone: newUser.phone || null,
           specialization: newUser.specialization || null,
           license_number: newUser.license_number || null,
-        });
+        }
+      });
 
-      if (profileError) throw profileError;
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
 
       toast({
         title: "Uspešno",
