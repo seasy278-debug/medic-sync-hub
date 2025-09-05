@@ -58,10 +58,13 @@ const Dashboard = () => {
           .eq('is_active', true);
 
         // Low stock items
-        const { data: lowStock } = await supabase
+        const { data: allItems } = await supabase
           .from('inventory_items')
-          .select('current_stock, min_stock_level')
-          .filter('current_stock', 'lte', 'min_stock_level');
+          .select('current_stock, min_stock_level');
+        
+        const lowStock = allItems?.filter(item => 
+          item.current_stock <= item.min_stock_level
+        ) || [];
 
         // Pending appointments
         const { count: pendingCount } = await supabase
