@@ -7,22 +7,46 @@ const corsHeaders = {
 }
 
 serve(async (req) => {
+  console.log('🚀 Edge Function called with method:', req.method)
+  console.log('🚀 Request URL:', req.url)
+  
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
+    console.log('✅ Handling CORS preflight')
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
+    console.log('🔧 Creating Supabase client...')
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+    
+    console.log('🔧 SUPABASE_URL exists:', !!supabaseUrl)
+    console.log('🔧 SERVICE_ROLE_KEY exists:', !!serviceRoleKey)
+    
+    if (!supabaseUrl || !serviceRoleKey) {
+      console.error('❌ Missing environment variables')
+      return new Response(
+        JSON.stringify({ error: 'Missing environment configuration' }),
+        { 
+          status: 500, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      )
+    }
+
+    const supabaseClient = createClient(supabaseUrl, serviceRoleKey)
 
     // Get the request body
-    const { email, password, full_name, role, phone, specialization, license_number } = await req.json()
+    console.log('📝 Reading request body...')
+    const requestBody = await req.json()
+    console.log('📝 Request body:', requestBody)
+    
+    const { email, password, full_name, role, phone, specialization, license_number } = requestBody
 
     // Validate required fields
     if (!email || !password || !full_name || !role) {
+      console.error('❌ Missing required fields:', { email: !!email, password: !!password, full_name: !!full_name, role: !!role })
       return new Response(
         JSON.stringify({ error: 'Missing required fields' }),
         { 
@@ -32,6 +56,7 @@ serve(async (req) => {
       )
     }
 
+    console.log('👤 Creating auth user...')
     // Create the user in auth.users
     const { data: authData, error: authError } = await supabaseClient.auth.admin.createUser({
       email,
@@ -43,7 +68,7 @@ serve(async (req) => {
     })
 
     if (authError) {
-      console.error('Auth error:', authError)
+      console.error('❌ Auth error:', authError)
       return new Response(
         JSON.stringify({ error: authError.message }),
         { 
@@ -52,6 +77,9 @@ serve(async (req) => {
         }
       )
     }
+
+    console.log('✅ Auth user created:', authData.user.id)
+    console.log('📋 Creating profile...')
 
     // Create the profile
     const { error: profileError } = await supabaseClient
@@ -67,7 +95,8 @@ serve(async (req) => {
       })
 
     if (profileError) {
-      console.error('Profile error:', profileError)
+      console.error('❌ Profile error:', profileError)
+      console.log('🧹 Cleaning up auth user...')
       // If profile creation fails, clean up the auth user
       await supabaseClient.auth.admin.deleteUser(authData.user.id)
       
@@ -79,6 +108,9 @@ serve(async (req) => {
         }
       )
     }
+
+    console.log('✅ Profile created successfully')
+    console.log('🎉 User creation completed successfully')
 
     return new Response(
       JSON.stringify({ 
@@ -95,9 +127,10 @@ serve(async (req) => {
     )
 
   } catch (error) {
-    console.error('Function error:', error)
+    console.error('💥 Function error:', error)
+    console.error('💥 Error stack:', error.stack)
     return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
+      JSON.stringify({ error: 'Internal server error', details: error.message }),
       { 
         status: 500, 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
