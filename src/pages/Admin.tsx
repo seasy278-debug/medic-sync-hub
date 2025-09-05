@@ -60,6 +60,7 @@ const Admin = () => {
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
   const [isPermissionDialogOpen, setIsPermissionDialogOpen] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
+  const [creatingUser, setCreatingUser] = useState(false);
   
   // Form states
   const [newUser, setNewUser] = useState({
@@ -129,6 +130,17 @@ const Admin = () => {
 
   const createUser = async () => {
     try {
+      setCreatingUser(true);
+      
+      console.log('Creating user with data:', {
+        email: newUser.email,
+        full_name: newUser.full_name,
+        role: newUser.role,
+        phone: newUser.phone,
+        specialization: newUser.specialization,
+        license_number: newUser.license_number
+      });
+
       // Call Edge Function to create user
       const { data, error } = await supabase.functions.invoke('create-user', {
         body: {
@@ -142,8 +154,16 @@ const Admin = () => {
         }
       });
 
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
+      console.log('Edge function response:', { data, error });
+
+      if (error) {
+        console.error('Edge function error:', error);
+        throw error;
+      }
+      if (data?.error) {
+        console.error('Edge function data error:', data.error);
+        throw new Error(data.error);
+      }
 
       toast({
         title: "Uspešno",
@@ -169,6 +189,8 @@ const Admin = () => {
         description: error.message || "Nije moguće kreirati korisnika",
         variant: "destructive",
       });
+    } finally {
+      setCreatingUser(false);
     }
   };
 
@@ -439,8 +461,12 @@ const Admin = () => {
                       </>
                     )}
                     
-                    <Button onClick={createUser} className="w-full bg-gradient-medical hover:shadow-medical">
-                      Kreiraj korisnika
+                    <Button 
+                      onClick={createUser} 
+                      disabled={creatingUser}
+                      className="w-full bg-gradient-medical hover:shadow-medical"
+                    >
+                      {creatingUser ? 'Kreiranje...' : 'Kreiraj korisnika'}
                     </Button>
                   </div>
                 </DialogContent>
