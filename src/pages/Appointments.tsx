@@ -101,13 +101,24 @@ const Appointments = () => {
         .select(`
           *,
           patients!inner (id, first_name, last_name),
-          profiles!inner (id, full_name, specialization)
+          profiles!appointments_doctor_id_fkey (id, full_name, specialization)
         `)
         .order('appointment_date', { ascending: true })
         .order('appointment_time', { ascending: true });
 
       if (appointmentsError) throw appointmentsError;
-      setAppointments(appointmentsData as Appointment[] || []);
+      
+      // Filter out appointments with failed joins and properly type the data
+      const validAppointments = (appointmentsData || []).filter(appointment => 
+        appointment.patients && 
+        appointment.profiles && 
+        typeof appointment.patients === 'object' &&
+        typeof appointment.profiles === 'object' &&
+        !('error' in appointment.patients) &&
+        !('error' in appointment.profiles)
+      ) as Appointment[];
+      
+      setAppointments(validAppointments);
 
       // Fetch patients
       const { data: patientsData, error: patientsError } = await supabase
